@@ -21,14 +21,14 @@ Weistra pwmRegelaar( pwmPin, 50, 100 ) ;
 extern void trainCatcherInit(void)
 {
     sm.nextState( waitSignal, 0 ) ;
-    //pwmRegelaar.begin() ;
+    pwmRegelaar.begin() ;
 }
 
 
 Debounce transceiver(   received ) ;
 Debounce holdTrain (    holdTrainPin ) ;
 Debounce breakSection(  breakSectionPin ) ;
-Debounce stopSection(   stopSectionPin ) ;
+//Debounce stopSection(   stopSectionPin ) ;
 
 // static void foo()
 // {
@@ -36,8 +36,11 @@ Debounce stopSection(   stopSectionPin ) ;
 // }
 
 // VARIABLES
+const int forward  = 1 ;
+const int reversed = 2 ;
 
 uint8_t     speed ;
+uint8_t     direction ;
 uint16_t    speedInterval ;
 uint32_t    timeStamp ;
 uint8_t     hold;
@@ -57,7 +60,7 @@ StateFunction( awaitTrain )
 {
     if( sm.entryState() )
     {
-        debug(F("awaiting train"));
+        // debug(F("awaiting train"));
         digitalWrite( pwmPin, HIGH ) ; // before waiting, enable trackpower first
     }
     if( sm.onState() )
@@ -78,27 +81,29 @@ StateFunction( slowTrain )
         speed = 100 ;
         pwmRegelaar.setSpeed( speed ) ;
         speedInterval = 20 + analogRead( potPin ) / 10 ;             // read break time from potmeter
-        debug(F("slowing down"));
+        // debug(F("slowing down"));
     }
     if( sm.onState() )
     {
         pwmRegelaar.update() ;                                    // handles PWM on track
 
-        if( stopSection.readInput() == FALLING )                    // If downgoing flank, decelerate train faster
-        {
-            speedInterval /= 3 ;
-            debug(F("slowing down faster"));
-        }
+        // if( stopSection.readInput() == FALLING )                    // If downgoing flank, decelerate train faster
+        // {
+        //     speedInterval /= 3 ;
+        //     // debug(F("slowing down faster"));
+        // }
 
         REPEAT_MS( speedInterval )
         {
             pwmRegelaar.setSpeed( -- speed ) ;
+            #ifdef DEBUG
             printNumberln("speed ", speed ) ;
+            #endif
         } END_REPEAT 
 
         if( speed == 0)
         {                                          // if speed = 0, exit -> 
-            debug(F("train stopped"));
+            // debug(F("train stopped"));
             sm.exit() ;
         }
     }
@@ -134,8 +139,11 @@ StateFunction( waitSignal )
 {
     if( sm.entryState() )
     {
-        debug(F("waiting on signal to depart"));
+        // debug(F("waiting on signal to depart"));
         sm.setTimeout( 500 ) ;
+
+        speed = 0 ;
+        pwmRegelaar.setSpeed( speed ) ;
     }
     if( sm.onState() )
     {
@@ -149,30 +157,27 @@ StateFunction( waitSignal )
             if( ++counter > 250 ) counter = 0 ;
         } END_REPEAT
 
-        digitalWrite( led,  !digitalRead( breakSectionPin  ));
 
-        //if( breakSection.readInput() == FALLING )              // if current is detected..
         if( digitalRead( pwmPin ) == HIGH && digitalRead( breakSectionPin ) == LOW ) 
         {
            sm.setTimeout( 500 ) ;                          // reload timer
            digitalWrite( pwmPin,  LOW );
-           //digitalWrite( led,  HIGH );
-           //while(digitalRead( breakSectionPin ) == LOW ) ;
-           //printNumberln(" end: ", micros() - timeStamp );
-       }
+        }
 
         if( holdTrain.readInput() == HIGH )                 // if train is not hold down by switch
         {
-            if( sm.timeout() )                              // if timeout, the polarity is switched -> send the train
+            if( sm.timeout() )                              // if timeout happens, the train is not detected -> depart the train
             {
                 sm.exit() ;
-                debug(F("polarity switch signal"));
+                direction = reversed ;
+                // debug(F("polarity switch signal"));
             }
             
             if( transceiver.readInput() == FALLING  )       // if signal is received -> send the train
             {
                 sm.exit() ;
-                debug(F("manual signal received"));
+                direction = forward ;
+                // debug(F("manual signal received"));
             }
         }
     }
@@ -190,8 +195,8 @@ StateFunction( accelerateTrain )
         speed = 0 ;
         pwmRegelaar.setSpeed( speed ) ;
         speedInterval = 20 + analogRead( potPin ) / 10 ;                // read accelerate time from potmeter
-        debug(F("train is allowed to depart"));
-        debug(F("accelerating"));
+        // debug(F("train is allowed to depart"));
+        // debug(F("accelerating"));
     }
 
     if( sm.onState() )
@@ -202,11 +207,13 @@ StateFunction( accelerateTrain )
             if( speed == 100 ) sm.exit() ;                                  // if speed is maximum -> next state
         } END_REPEAT
         
+        if( direction == reversed 
+        &&  digitalRead( breakSectionPin ) == false ) sm.exit() ;          // or if sensor is made while train should be driving backwards, stop at once
     }
 
     if( sm.exitState() )
     {
-        debug(F("speed at maximum"));
+        // debug(F("speed at maximum"));
     }
     return sm.endState() ;
 }
@@ -224,7 +231,7 @@ extern uint8_t trainCatcher()
     REPEAT_MS( 1 ) 
     {
         breakSection.debounceInputs() ;
-        stopSection.debounceInputs() ;
+        //stopSection.debounceInputs() ;
     } END_REPEAT
 
     pwmRegelaar.update() ;      
@@ -241,11 +248,12 @@ extern uint8_t trainCatcher()
         sm.nextState( sendSignal, 0 ) ; }
 
     State( sendSignal ) {
-        //sm.nextState( waitSignal     , 0 ) ; TODO, in the event that the train is accelerating forword when it should not to, go back
         sm.nextState( accelerateTrain, 0 ) ; }
 
     State(accelerateTrain) {
-        sm.nextState( awaitTrain, 0 ) ; }
+        
+        if( speed == 100 )  sm.nextState( awaitTrain, 0 ) ;
+        else                sm.nextState( waitSignal, 0 ) ; }
 
     STATE_MACHINE_END
 }
