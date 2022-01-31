@@ -1,0 +1,7 @@
+12	received	INPUT_PULLUP
+2	holdTrainPin	INPUT_PULLUP
+A1	breakSectionPin	INPUT_PULLUP
+4	stopSectionPin	INPUT_PULLUP
+5	pwmPin	OUTPUT
+A0	potPin	INPUT
+13	led	OUTPUT
