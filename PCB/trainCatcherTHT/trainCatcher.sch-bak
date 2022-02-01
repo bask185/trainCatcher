@@ -948,4 +948,48 @@ Wire Wire Line
 Connection ~ 7400 4250
 Wire Wire Line
 	7400 3700 7400 4250
+$Comp
+L Isolator:LTV-847 U7
+U 1 1 62045CE4
+P 1250 850
+F 0 "U7" H 1250 1175 50  0000 C CNN
+F 1 "LTV-847" H 1250 1084 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 650 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 850 50  0001 L CNN
+	1    1250 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:LTV-847 U7
+U 2 1 62047560
+P 1250 1350
+F 0 "U7" H 1250 1675 50  0000 C CNN
+F 1 "LTV-847" H 1250 1584 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 1150 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 1350 50  0001 L CNN
+	2    1250 1350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:LTV-847 U7
+U 3 1 62048522
+P 1250 1800
+F 0 "U7" H 1250 2125 50  0000 C CNN
+F 1 "LTV-847" H 1250 2034 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 1600 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 1800 50  0001 L CNN
+	3    1250 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:LTV-847 U7
+U 4 1 6204A478
+P 1250 2250
+F 0 "U7" H 1250 2575 50  0000 C CNN
+F 1 "LTV-847" H 1250 2484 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 2050 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 2250 50  0001 L CNN
+	4    1250 2250
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

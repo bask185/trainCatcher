@@ -151,7 +151,7 @@ StateFunction( waitSignal )
         {
             static uint8_t counter = 0 ;
 
-            if( counter == 0 ) { digitalWrite( pwmPin, HIGH ); delay(1); }
+            if( counter == 0 ) { digitalWrite( pwmPin, HIGH ); delayMicroseconds(500); }
             else                 digitalWrite( pwmPin,  LOW );
 
             if( ++counter > 250 ) counter = 0 ;
@@ -163,22 +163,18 @@ StateFunction( waitSignal )
            sm.setTimeout( 500 ) ;                          // reload timer
            digitalWrite( pwmPin,  LOW );
         }
-
-        if( holdTrain.readInput() == HIGH )                 // if train is not hold down by switch
+        uint8_t holdState = holdTrain.readInput() ;
+        if( holdState == HIGH && sm.timeout() )                              // if timeout happens, the train is not detected -> depart the train
         {
-            if( sm.timeout() )                              // if timeout happens, the train is not detected -> depart the train
-            {
-                sm.exit() ;
-                direction = reversed ;
-                // debug(F("polarity switch signal"));
-            }
-            
-            if( transceiver.readInput() == FALLING  )       // if signal is received -> send the train
-            {
-                sm.exit() ;
-                direction = forward ;
-                // debug(F("manual signal received"));
-            }
+            sm.exit() ;
+            direction = reversed ;
+            // debug(F("polarity switch signal"));
+        }
+        if( holdState == RISING  )       // if signal is received -> send the train
+        {
+            sm.exit() ;
+            direction = forward ;
+            // debug(F("manual signal received"));
         }
     }
     if( sm.exitState() )

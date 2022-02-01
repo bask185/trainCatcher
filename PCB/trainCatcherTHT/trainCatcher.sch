@@ -524,17 +524,6 @@ F 3 "" H 2300 3700 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	2300 3450 2300 3700
-$Comp
-L Isolator:SFH617A-1 U5
-U 1 1 61E0D8F1
-P 6200 5000
-F 0 "U5" H 6250 4650 50  0000 C CNN
-F 1 "SFH617A-1" H 6200 4750 50  0000 C CNN
-F 2 "Package_DIP:DIP-4_W7.62mm" H 6000 4800 50  0001 L CIN
-F 3 "http://www.vishay.com/docs/83740/sfh617a.pdf" H 6200 5000 50  0001 L CNN
-	1    6200 5000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6750 5650 6750 4800
 Wire Wire Line
@@ -543,17 +532,6 @@ Wire Wire Line
 	5800 5100 5900 5100
 Wire Wire Line
 	4950 4850 5400 4850
-$Comp
-L Isolator:SFH617A-1 U6
-U 1 1 61E0BF7C
-P 6200 4700
-F 0 "U6" H 6250 4350 50  0000 C CNN
-F 1 "SFH617A-1" H 6250 4450 50  0000 C CNN
-F 2 "Package_DIP:DIP-4_W7.62mm" H 6000 4500 50  0001 L CIN
-F 3 "http://www.vishay.com/docs/83740/sfh617a.pdf" H 6200 4700 50  0001 L CNN
-	1    6200 4700
-	1    0    0    1   
-$EndComp
 Wire Wire Line
 	5900 4800 5700 4800
 Wire Wire Line
@@ -621,17 +599,6 @@ Wire Wire Line
 	6750 2950 6100 2950
 Wire Wire Line
 	6750 3700 6100 3700
-$Comp
-L Isolator:SFH617A-1 U3
-U 1 1 61E04D4A
-P 5700 3300
-F 0 "U3" H 5700 3625 50  0000 C CNN
-F 1 "SFH617A-1" H 5700 3534 50  0000 C CNN
-F 2 "Package_DIP:DIP-4_W7.62mm" H 5500 3100 50  0001 L CIN
-F 3 "http://www.vishay.com/docs/83740/sfh617a.pdf" H 5700 3300 50  0001 L CNN
-	1    5700 3300
-	-1   0    0    1   
-$EndComp
 Text Label 7450 2550 0    50   ~ 0
 stopTrack
 Text Label 7350 2550 2    50   ~ 0
@@ -723,17 +690,6 @@ Wire Wire Line
 	6100 3400 6000 3400
 Wire Wire Line
 	8050 3700 8700 3700
-$Comp
-L Isolator:SFH617A-1 U4
-U 1 1 61E0B7C3
-P 9100 3300
-F 0 "U4" H 9100 3625 50  0000 C CNN
-F 1 "SFH617A-1" H 9100 3534 50  0000 C CNN
-F 2 "Package_DIP:DIP-4_W7.62mm" H 8900 3100 50  0001 L CIN
-F 3 "http://www.vishay.com/docs/83740/sfh617a.pdf" H 9100 3300 50  0001 L CNN
-	1    9100 3300
-	1    0    0    1   
-$EndComp
 Connection ~ 8050 2950
 Wire Wire Line
 	7500 2950 8050 2950
@@ -951,45 +907,45 @@ Wire Wire Line
 $Comp
 L Isolator:LTV-847 U7
 U 1 1 62045CE4
-P 1250 850
-F 0 "U7" H 1250 1175 50  0000 C CNN
-F 1 "LTV-847" H 1250 1084 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 650 50  0001 L CIN
-F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 850 50  0001 L CNN
-	1    1250 850 
-	1    0    0    -1  
+P 5700 3300
+F 0 "U7" H 5700 2983 50  0000 C CNN
+F 1 "LTV-847" H 5700 3074 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 5500 3100 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 5700 3300 50  0001 L CNN
+	1    5700 3300
+	-1   0    0    1   
 $EndComp
 $Comp
 L Isolator:LTV-847 U7
 U 2 1 62047560
-P 1250 1350
-F 0 "U7" H 1250 1675 50  0000 C CNN
-F 1 "LTV-847" H 1250 1584 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 1150 50  0001 L CIN
-F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 1350 50  0001 L CNN
-	2    1250 1350
-	1    0    0    -1  
+P 9100 3300
+F 0 "U7" H 9100 3625 50  0000 C CNN
+F 1 "LTV-847" H 9100 3534 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 8900 3100 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 9100 3300 50  0001 L CNN
+	2    9100 3300
+	1    0    0    1   
 $EndComp
 $Comp
 L Isolator:LTV-847 U7
 U 3 1 62048522
-P 1250 1800
-F 0 "U7" H 1250 2125 50  0000 C CNN
-F 1 "LTV-847" H 1250 2034 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 1600 50  0001 L CIN
-F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 1800 50  0001 L CNN
-	3    1250 1800
-	1    0    0    -1  
+P 6200 4700
+F 0 "U7" H 6200 4400 50  0000 C CNN
+F 1 "LTV-847" H 6200 4500 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 6000 4500 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 6200 4700 50  0001 L CNN
+	3    6200 4700
+	1    0    0    1   
 $EndComp
 $Comp
 L Isolator:LTV-847 U7
 U 4 1 6204A478
-P 1250 2250
-F 0 "U7" H 1250 2575 50  0000 C CNN
-F 1 "LTV-847" H 1250 2484 50  0000 C CNN
-F 2 "Package_DIP:DIP-16_W7.62mm" H 1050 2050 50  0001 L CIN
-F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 1250 2250 50  0001 L CNN
-	4    1250 2250
+P 6200 5000
+F 0 "U7" H 6200 4700 50  0000 C CNN
+F 1 "LTV-847" H 6200 4800 50  0000 C CNN
+F 2 "Package_DIP:DIP-16_W7.62mm" H 6000 4800 50  0001 L CIN
+F 3 "http://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-8X7%20series.PDF" H 6200 5000 50  0001 L CNN
+	4    6200 5000
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
