@@ -147,29 +147,29 @@ StateFunction( waitSignal )
     }
     if( sm.onState() )
     {
-        REPEAT_MS( 1 )
-        {
-            static uint8_t counter = 0 ;
+        // REPEAT_MS( 1 )
+        // {
+        //     static uint8_t counter = 0 ;
 
-            if( counter == 0 ) { digitalWrite( pwmPin, HIGH ); delayMicroseconds(500); }
-            else                 digitalWrite( pwmPin,  LOW );
+        //     if( counter == 0 ) { digitalWrite( pwmPin, HIGH ); delayMicroseconds(500); }
+        //     else                 digitalWrite( pwmPin,  LOW );
 
-            if( ++counter > 250 ) counter = 0 ;
-        } END_REPEAT
+        //     if( ++counter > 250 ) counter = 0 ;
+        // } END_REPEAT
 
 
-        if( digitalRead( pwmPin ) == HIGH && digitalRead( breakSectionPin ) == LOW ) 
-        {
-           sm.setTimeout( 500 ) ;                          // reload timer
-           digitalWrite( pwmPin,  LOW );
-        }
-        uint8_t holdState = holdTrain.readInput() ;
-        if( holdState == HIGH && sm.timeout() )                              // if timeout happens, the train is not detected -> depart the train
-        {
-            sm.exit() ;
-            direction = reversed ;
-            // debug(F("polarity switch signal"));
-        }
+        // if( digitalRead( pwmPin ) == HIGH && digitalRead( breakSectionPin ) == LOW ) 
+        // {
+        //    sm.setTimeout( 500 ) ;                          // reload timer
+        //    digitalWrite( pwmPin,  LOW );
+        // }
+        // uint8_t holdState = holdTrain.readInput() ;
+        // if( holdState == HIGH && sm.timeout() )                              // if timeout happens, the train is not detected -> depart the train
+        // {
+        //     sm.exit() ;
+        //     direction = reversed ;
+        //     // debug(F("polarity switch signal"));
+        // }
         if( holdState == RISING  )       // if signal is received -> send the train
         {
             sm.exit() ;
@@ -202,9 +202,6 @@ StateFunction( accelerateTrain )
             pwmRegelaar.setSpeed( ++ speed ) ;
             if( speed == 100 ) sm.exit() ;                                  // if speed is maximum -> next state
         } END_REPEAT
-        
-        if( direction == reversed 
-        &&  digitalRead( breakSectionPin ) == false ) sm.exit() ;          // or if sensor is made while train should be driving backwards, stop at once
     }
 
     if( sm.exitState() )
@@ -247,9 +244,7 @@ extern uint8_t trainCatcher()
         sm.nextState( accelerateTrain, 0 ) ; }
 
     State(accelerateTrain) {
-        
-        if( speed == 100 )  sm.nextState( awaitTrain, 0 ) ;
-        else                sm.nextState( waitSignal, 0 ) ; }
+        sm.nextState( awaitTrain, 8000 ) ; }
 
     STATE_MACHINE_END
 }
