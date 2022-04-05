@@ -28,12 +28,6 @@ extern void trainCatcherInit(void)
 Debounce transceiver(   received ) ;
 Debounce holdTrain (    holdTrainPin ) ;
 Debounce breakSection(  breakSectionPin ) ;
-//Debounce stopSection(   stopSectionPin ) ;
-
-// static void foo()
-// {
-//     ;
-// }
 
 // VARIABLES
 const int forward  = 1 ;
@@ -45,23 +39,12 @@ uint16_t    speedInterval ;
 uint32_t    timeStamp ;
 uint8_t     hold;
 
-
-void debug(String txt)
-{
-    #ifdef DEBUG
-    Serial.println(txt);
-    Serial.println();
-    
-    #endif
-}
-
 // STATE FUNCTIONS
 StateFunction( awaitTrain )
 {
     if( sm.entryState() )
     {
-        // debug(F("awaiting train"));
-        digitalWrite( pwmPin, HIGH ) ; // before waiting, enable trackpower first
+        digitalWrite( pwmPin, HIGH ) ;                                          // before waiting, enable trackpower first
     }
     if( sm.onState() )
     {  
@@ -81,17 +64,10 @@ StateFunction( slowTrain )
         speed = 100 ;
         pwmRegelaar.setSpeed( speed ) ;
         speedInterval = 20 + analogRead( potPin ) / 10 ;             // read break time from potmeter
-        // debug(F("slowing down"));
     }
     if( sm.onState() )
     {
         pwmRegelaar.update() ;                                    // handles PWM on track
-
-        // if( stopSection.readInput() == FALLING )                    // If downgoing flank, decelerate train faster
-        // {
-        //     speedInterval /= 3 ;
-        //     // debug(F("slowing down faster"));
-        // }
 
         REPEAT_MS( speedInterval )
         {
@@ -102,8 +78,7 @@ StateFunction( slowTrain )
         } END_REPEAT 
 
         if( speed == 0)
-        {                                          // if speed = 0, exit -> 
-            // debug(F("train stopped"));
+        { 
             sm.exit() ;
         }
     }
@@ -139,7 +114,6 @@ StateFunction( waitSignal )
 {
     if( sm.entryState() )
     {
-        // debug(F("waiting on signal to depart"));
         sm.setTimeout( 500 ) ;
 
         speed = 0 ;
@@ -147,34 +121,9 @@ StateFunction( waitSignal )
     }
     if( sm.onState() )
     {
-        // REPEAT_MS( 1 )
-        // {
-        //     static uint8_t counter = 0 ;
-
-        //     if( counter == 0 ) { digitalWrite( pwmPin, HIGH ); delayMicroseconds(500); }
-        //     else                 digitalWrite( pwmPin,  LOW );
-
-        //     if( ++counter > 250 ) counter = 0 ;
-        // } END_REPEAT
-
-
-        // if( digitalRead( pwmPin ) == HIGH && digitalRead( breakSectionPin ) == LOW ) 
-        // {
-        //    sm.setTimeout( 500 ) ;                          // reload timer
-        //    digitalWrite( pwmPin,  LOW );
-        // }
-        // uint8_t holdState = holdTrain.readInput() ;
-        // if( holdState == HIGH && sm.timeout() )                              // if timeout happens, the train is not detected -> depart the train
-        // {
-        //     sm.exit() ;
-        //     direction = reversed ;
-        //     // debug(F("polarity switch signal"));
-        // }
-        if( holdState == RISING  )       // if signal is received -> send the train
+        if( holdState == RISING  )       // if signal is released -> send the train
         {
             sm.exit() ;
-            direction = forward ;
-            // debug(F("manual signal received"));
         }
     }
     if( sm.exitState() )
@@ -191,8 +140,6 @@ StateFunction( accelerateTrain )
         speed = 0 ;
         pwmRegelaar.setSpeed( speed ) ;
         speedInterval = 20 + analogRead( potPin ) / 10 ;                // read accelerate time from potmeter
-        // debug(F("train is allowed to depart"));
-        // debug(F("accelerating"));
     }
 
     if( sm.onState() )
@@ -206,7 +153,7 @@ StateFunction( accelerateTrain )
 
     if( sm.exitState() )
     {
-        // debug(F("speed at maximum"));
+        
     }
     return sm.endState() ;
 }
@@ -221,10 +168,9 @@ extern uint8_t trainCatcher()
         holdTrain.debounceInputs() ;
     } END_REPEAT
 
-    REPEAT_MS( 1 ) 
+    REPEAT_MS( 20 ) 
     {
         breakSection.debounceInputs() ;
-        //stopSection.debounceInputs() ;
     } END_REPEAT
 
     pwmRegelaar.update() ;      
