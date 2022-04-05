@@ -200,13 +200,13 @@ StateFunction( accelerateTrain )
         REPEAT_MS( speedInterval )
         {
             pwmRegelaar.setSpeed( ++ speed ) ;
-            if( speed == 100 ) sm.exit() ;                                  // if speed is maximum -> next state
+            if( speed == 100 ) sm.exit() ;                                      // if speed is maximum -> next state
         } END_REPEAT
         
         if( direction == reversed 
-        &&  digitalRead( breakSectionPin ) == false ) sm.exit() ;          // or if sensor is made while train should be driving backwards, stop at once
-    }
-
+        &&  digitalRead( breakSectionPin ) == false ) sm.exit() ;               // or if sensor is made while train should be driving backwards, stop at once
+    }                                                                           // it may occur that a train just loses connection with tracks for a brief moment
+                                                                                // this could lead to the the train departing too soon, if this happens we go back to waitSignal
     if( sm.exitState() )
     {
         // debug(F("speed at maximum"));
@@ -247,8 +247,7 @@ extern uint8_t trainCatcher()
         sm.nextState( accelerateTrain, 0 ) ; }
 
     State(accelerateTrain) {
-        
-        if( speed == 100 )  sm.nextState( awaitTrain, 0 ) ;
+        if( speed == 100 )  sm.nextState( awaitTrain, 8000 ) ;
         else                sm.nextState( waitSignal, 0 ) ; }
 
     STATE_MACHINE_END
