@@ -14,6 +14,7 @@ static StateMachine sm ;
 #error beginState not defined
 #endif
 
+bool internalPause ;
 
 Weistra pwmRegelaar( pwmPin, 50, 100 ) ;
 
@@ -27,13 +28,53 @@ extern void trainCatcherInit(void)
 
 Debounce transceiver(   received ) ;
 Debounce holdTrain (    holdTrainPin ) ;
-Debounce breakSection(  breakSectionPin ) ;
-//Debounce stopSection(   stopSectionPin ) ;
 
-// static void foo()
-// {
-//     ;
-// }
+if( breakSection.getState )
+
+
+// This I have now
+Debounce breakSection(  breakSectionPin ) ;
+Debounce stopSection(   stopSectionPin ) ;
+
+
+
+
+// in code
+if( breakSection.getState() == FALLING ) doSomethingOnce() ;
+
+
+// This is what I want
+Debounce section1(  breakSectionPin ) ;
+Debounce section2(   stopSectionPin ) ;
+
+Debounce* breakSection ( 0 ) ;  // how does this work with arguments?
+Debounce* stopSection  ( null ) ;
+
+void debounce() // runs every 50ms
+{   
+    breakSection.debounce() ;
+    stopSection.debounce() ;
+}
+
+void readSensors()
+{
+    if( section1.getState() == FALLING )
+    {
+        breakSection = &section1 ;
+        stopSection  = &section2 ;
+    }
+    if( section2.getState() == FALLING )
+    {
+        breakSection = &section2 ;
+        stopSection  = &section1 ;
+    }   
+}
+
+// later in code ...
+    if( breakSection -> getState() == RISING )
+    {
+        // ... code
+    }
 
 // VARIABLES
 const int forward  = 1 ;
@@ -44,7 +85,6 @@ uint8_t     direction ;
 uint16_t    speedInterval ;
 uint32_t    timeStamp ;
 uint8_t     hold;
-
 
 void debug(String txt)
 {
@@ -118,6 +158,7 @@ StateFunction( sendSignal )
 {
     if( sm.entryState() )
     {
+        internalPause = false ;
         digitalWrite(received, HIGH ) ;
         sm.setTimeout( 100 ) ;
     }
@@ -125,6 +166,11 @@ StateFunction( sendSignal )
     {
         if( sm.timeout() )
         {
+            sm.exit() ;
+        }
+        if( holdState == FALLING )
+        {
+            internalPause = true ;
             sm.exit() ;
         }
     }
@@ -190,7 +236,7 @@ StateFunction( accelerateTrain )
     {
         speed = 0 ;
         pwmRegelaar.setSpeed( speed ) ;
-        speedInterval = 20 + analogRead( potPin ) / 10 ;                // read accelerate time from potmeter
+        speedInterval = 20 + analogRead( potPin ) / 13 ;                // read accelerate time from potmeter 30% faster than slowing down
         // debug(F("train is allowed to depart"));
         // debug(F("accelerating"));
     }
@@ -222,12 +268,9 @@ extern uint8_t trainCatcher()
     {
         transceiver.debounceInputs() ;
         holdTrain.debounceInputs() ;
-    } END_REPEAT
-
-    REPEAT_MS( 1 ) 
-    {
         breakSection.debounceInputs() ;
-        //stopSection.debounceInputs() ;
+        stopSection.debounceInputs() ;
+        
     } END_REPEAT
 
     pwmRegelaar.update() ;      
@@ -241,7 +284,8 @@ extern uint8_t trainCatcher()
         sm.nextState( waitSignal, 100 ) ; }
 
     State(waitSignal) {
-        sm.nextState( sendSignal, 0 ) ; }
+        if( internalPause == true ) sm.nextState( accelerateTrain, 30000 ) ;
+        else                        sm.nextState( sendSignal, 0 ) ; }
 
     State( sendSignal ) {
         sm.nextState( accelerateTrain, 0 ) ; }
