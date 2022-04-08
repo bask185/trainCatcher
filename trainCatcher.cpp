@@ -56,25 +56,20 @@ void debounce() // runs every 50ms
     stopSection.debounce() ;
 }
 
-void readSensors()
-{
-    if( section1.getState() == FALLING )
-    {
-        breakSection = &section1 ;
-        stopSection  = &section2 ;
-    }
-    if( section2.getState() == FALLING )
-    {
-        breakSection = &section2 ;
-        stopSection  = &section1 ;
-    }   
-}
+// void readSensors()
+// {
+//     if( section1.getState() == FALLING )
+//     {
+//         breakSection = &section1 ;
+//         stopSection  = &section2 ;
+//     }
+//     if( section2.getState() == FALLING )
+//     {
+//         breakSection = &section2 ;
+//         stopSection  = &section1 ;
+//     }   
+// }
 
-// later in code ...
-    if( breakSection -> getState() == RISING )
-    {
-        // ... code
-    }
 
 // VARIABLES
 const int forward  = 1 ;
@@ -193,7 +188,7 @@ StateFunction( waitSignal )
     }
     if( sm.onState() )
     {
-        REPEAT_MS( 1 )
+        REPEAT_MS( 1 )  
         {
             static uint8_t counter = 0 ;
 
@@ -270,7 +265,7 @@ extern uint8_t trainCatcher()
         holdTrain.debounceInputs() ;
         breakSection.debounceInputs() ;
         stopSection.debounceInputs() ;
-        
+
     } END_REPEAT
 
     pwmRegelaar.update() ;      
