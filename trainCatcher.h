@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#define DEBUG
+
 enum trainCatcherStates
 {
     trainCatcherIDLE,

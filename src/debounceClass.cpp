@@ -4,7 +4,7 @@ Debounce::Debounce(unsigned char _pin) {
 	pin = _pin;
 }
 
-unsigned char Debounce::readInput() {
+unsigned char Debounce::getState() {
 	byte retValue = state;
 
 	if(state == RISING)  state = HIGH; // take note I use a pull-up resistor
@@ -12,7 +12,7 @@ unsigned char Debounce::readInput() {
 
 	return retValue; }
 
-void Debounce::debounceInputs() {
+void Debounce::debounce() {
 	bool newSample = digitalRead(pin);
 
 	if(newSample == oldSample) {	// if the same state is detected atleast twice in 20ms...
