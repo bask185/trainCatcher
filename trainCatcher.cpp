@@ -30,52 +30,8 @@ Debounce section1( sectionPin1 ) ;
 Debounce section2( sectionPin2 ) ;
 Debounce holdLine( holdTrainPin ) ;
 
-<<<<<<< HEAD
-if( breakSection.getState )
-
-
-// This I have now
-Debounce breakSection(  breakSectionPin ) ;
-Debounce stopSection(   stopSectionPin ) ;
-
-
-
-
-// in code
-if( breakSection.getState() == FALLING ) doSomethingOnce() ;
-
-
-// This is what I want
-Debounce section1(  breakSectionPin ) ;
-Debounce section2(   stopSectionPin ) ;
-
-Debounce* breakSection ( 0 ) ;  // how does this work with arguments?
-Debounce* stopSection  ( null ) ;
-
-void debounce() // runs every 50ms
-{   
-    breakSection.debounce() ;
-    stopSection.debounce() ;
-}
-
-// void readSensors()
-// {
-//     if( section1.getState() == FALLING )
-//     {
-//         breakSection = &section1 ;
-//         stopSection  = &section2 ;
-//     }
-//     if( section2.getState() == FALLING )
-//     {
-//         breakSection = &section2 ;
-//         stopSection  = &section1 ;
-//     }   
-// }
-
-=======
 Debounce* breakSection ( 0 ) ;
 Debounce* stopSection  ( 0 ) ;
->>>>>>> 07aaa4fa1c39cb7c6ad4ef6a802a1dee9bf398ba
 
 // VARIABLES
 const int forward  = 1 ;
@@ -204,15 +160,9 @@ StateFunction( waitSignal )
     }
     if( sm.onState() )
     {
-<<<<<<< HEAD
-        REPEAT_MS( 1 )  
-        {
-            static uint8_t counter = 0 ;
-=======
         // REPEAT_MS( 1 )
         // {
         //     static uint8_t counter = 0 ;
->>>>>>> 07aaa4fa1c39cb7c6ad4ef6a802a1dee9bf398ba
 
         //     if( counter == 0 ) { digitalWrite( pwmPin, HIGH ); delayMicroseconds(500); }
         //     else                 digitalWrite( pwmPin,  LOW );
