@@ -1,0 +1,6 @@
+6	received	INPUT_PULLUP
+1	pwmPin	OUTPUT
+2	sectionPin1	INPUT_PULLUP
+3	holdTrainPin	INPUT_PULLUP
+5	sectionPin2	INPUT_PULLUP
+A2	potPin	INPUT
